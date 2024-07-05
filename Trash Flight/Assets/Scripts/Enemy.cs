@@ -39,6 +39,9 @@ public class Enemy : MonoBehaviour
             Destroy(other.gameObject); // 부딪힌 미사일은 바로 부수고
 
             if (hp <= 0) { // 적군 hp가 0이되면 적군도 부숨
+                if (gameObject.tag == "Boss") {
+                    GameManager.instance.SetGameOver();
+                }
                 Destroy(gameObject);
                 Instantiate(coin, transform.position, Quaternion.identity);
             }

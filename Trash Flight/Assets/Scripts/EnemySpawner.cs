@@ -7,6 +7,9 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private GameObject[] enemies; // tool에서 prefabs로 넣을 enemy 객체들
 
+    [SerializeField]
+    private GameObject boss;
+
     private float[] arrPosX = {-2.2f, -1.1f, 0f, 1.1f, 2.1f};
 
     [SerializeField]
@@ -20,6 +23,10 @@ public class EnemySpawner : MonoBehaviour
 
     void StartEnemyRoutine() {
         StartCoroutine("EnemyRoutine");
+    }
+
+    public void StopEnemyRoutine() {
+        StopCoroutine("EnemyRoutine");
     }
 
     IEnumerator EnemyRoutine() {
@@ -41,6 +48,12 @@ public class EnemySpawner : MonoBehaviour
                 moveSpeed += 1;
             }
 
+            if (enemyIndex >= enemies.Length) {
+                SpawnBoss();
+                enemyIndex = 0;
+                moveSpeed = 5f;
+            }
+
              yield return new WaitForSeconds(spawnInterval); // 위의 spawnInterval 만큼 기다렸다가 다시 반복문 내용 시작
         }
     }
@@ -59,5 +72,9 @@ public class EnemySpawner : MonoBehaviour
         GameObject enemyObject = Instantiate(enemies[index], spawnPos, Quaternion.identity); // 새로운 적 객체를 생성
         Enemy enemy = enemyObject.GetComponent<Enemy>(); // 만든 적 객체 내부의 컴포넌트중 Enemy 컴포넌트 들고옴
         enemy.SetMoveSpeed(moveSpeed); // 그안에 public으로 선언되어있는 함수 실행
+    }
+
+    void SpawnBoss() {
+        Instantiate(boss, transform.position, Quaternion.identity);
     }
 }

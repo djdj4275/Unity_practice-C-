@@ -45,7 +45,9 @@ public class Player : MonoBehaviour
         float toX = Mathf.Clamp(mousePos.x, -2.35f, 2.35f); // 마우스는 옆의 벽과 상관없이 충돌처리가 안되기때문에 좌/우 x좌표의 최소,최대값을 정해줘야함
         transform.position = new Vector3(toX, transform.position.y, 0); // 원래 플레이의 y값은 유지하고 x값만 마우스값 따라감 (z는 2d게임이니 0)
 
-        Shoot();
+        if (!GameManager.instance.isGameOver) {
+            Shoot();
+        }
     }
 
     void Shoot() {
@@ -59,8 +61,9 @@ public class Player : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.tag == "Enemy") { // 적이랑 부딪히면 플레이어 죽음
+        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Boss") { // 적이랑 부딪히면 플레이어 죽음
             Destroy(gameObject);
+            GameManager.instance.SetGameOver();
         } else if (other.gameObject.tag == "Coin") {
             GameManager.instance.IncreaseCoin();
             Destroy(other.gameObject);

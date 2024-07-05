@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,7 +11,13 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI text;
 
+    [SerializeField]
+    private GameObject gameOverPanel;
+
     private int coin = 0;
+
+    [HideInInspector] // public 변수이지만 inspector 창에서 보이지 않게됨
+    public bool isGameOver = false;
 
     // 싱글턴 디자인 방식
     void Awake() { // Awake는 Start보다 한단계 더 빠르게 호출되는 메소드
@@ -29,5 +36,24 @@ public class GameManager : MonoBehaviour
                 player.Upgrade();
             }
         }
+    }
+
+    public void SetGameOver() {
+        isGameOver = true;
+
+        EnemySpawner enemySpawner = FindObjectOfType<EnemySpawner>();
+        if (enemySpawner != null) {
+            enemySpawner.StopEnemyRoutine();
+        }
+
+        Invoke("showGameOverPanel", 0.5f); // 0.5초 기다린뒤에 함수 실행
+    }
+
+    void showGameOverPanel() {
+        gameOverPanel.SetActive(true);
+    }
+
+    public void PlayAgain() {
+        SceneManager.LoadScene("SampleScene");
     }
 }
