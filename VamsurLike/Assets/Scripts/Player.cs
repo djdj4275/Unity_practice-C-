@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     SpriteRenderer spriter;
     Animator anim;
 
+    public Scanner scanner;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +25,8 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         spriter = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+
+        scanner = GetComponent<Scanner>();
     }
 
     // Update is called once per frame
